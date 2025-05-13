@@ -24,8 +24,8 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public void importTransactions(List<TransactionReqDTO> transactions) {
-        for (TransactionReqDTO transactionReqDTO : transactions) {
+    public void importTransactions(List<TransactionReqDTO> transactionReqDTOList) {
+        for (TransactionReqDTO transactionReqDTO : transactionReqDTOList) {
             try {
                 Transaction transaction = transactionMapper.toEntity(transactionReqDTO);
 

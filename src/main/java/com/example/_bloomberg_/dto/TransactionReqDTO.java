@@ -1,9 +1,8 @@
 package com.example._bloomberg_.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-
+import jakarta.validation.constraints.*;
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 
 public record TransactionReqDTO(
 
@@ -18,18 +17,13 @@ public record TransactionReqDTO(
         @Pattern(regexp = "^[A-Z]{3}$", message = "Currency To must be ISO 4217 format")
         String currencyTo,
 
-        @NotBlank(message = "Timestamp is mandatory")
-        @Pattern(
-                regexp = "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(:\\d{2})?Z$",
-                message = "Timestamp must be in ISO-8601 format (e.g., 2024-08-13T12:30:00Z)"
-        )
-        String timestamp,
+        @NotNull(message = "Timestamp is mandatory")
+        @PastOrPresent(message = "Timestamp must be in the past or present")
+        ZonedDateTime timestamp,
 
-        @NotBlank(message = "Amount is mandatory")
-        @Pattern(
-                regexp = "^\\d+(\\.\\d{1,2})?$",
-                message = "Amount must be a valid decimal (e.g., 1000.50)"
-        )
+        @NotNull(message = "Amount is mandatory")
+        @DecimalMin(value = "0.0", inclusive = false, message = "Amount must be greater than 0")
+        @Digits(integer = 10, fraction = 2, message = "Amount must be a valid decimal with up to 2 decimals")
         BigDecimal amount
 
 ) {}
