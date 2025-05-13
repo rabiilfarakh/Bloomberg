@@ -1,0 +1,23 @@
+
+services:
+  db:
+    image: postgres:latest
+    container_name: bloomberg_postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=bloomberg_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - bloomberg_network
+
+networks:
+  bloomberg_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
