@@ -68,8 +68,9 @@ cd bloomberg-transaction-import
 ]
 ```
 ### 📥 Response JSON Example:
+```bash
 Response (HTTP 200 OK):
-```json
+
 Transactions imported successfully
 ```
 
