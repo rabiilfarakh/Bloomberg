@@ -1,5 +1,7 @@
 package com.example._bloomberg_.exception;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,10 +31,20 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiError> handleConstraintViolation(ConstraintViolationException ex) {
         List<String> errors = ex.getConstraintViolations()
                 .stream()
-                .map(violation -> violation.getMessage())
+                .map(ConstraintViolation::getMessage)
                 .collect(Collectors.toList());
 
         ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST.value(), "Invalid input", errors);
+        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(JsonParseException.class)
+    public ResponseEntity<ApiError> handleJsonParseException(JsonParseException ex) {
+        ApiError apiError = new ApiError(
+                HttpStatus.BAD_REQUEST.value(),
+                "JSON parse error",
+                List.of(ex.getMessage())
+        );
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
 
